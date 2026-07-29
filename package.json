@@ -37,7 +37,8 @@
     "picocolors": "^1.1.1",
     "postcss": "^8.5.16",
     "rollup": "^4.62.2",
-    "source-map-js": "^1.2.1"
+    "source-map-js": "^1.2.1",
+    "zod": "^4.4.3"
   },
   "keywords": [],
   "author": "",
