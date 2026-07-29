@@ -1,7 +1,3 @@
-export type UpdateProfileDto = {
-  firstName?: string | null;
-  lastName?: string | null;
-  birthDate?: string | null;
-  address?: string | null;
-  phone?: string | null;
-};
+import type { UpdateProfileInput } from '../validations/profileValidation.js';
+
+export type UpdateProfileDto = UpdateProfileInput;

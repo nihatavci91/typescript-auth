@@ -1,5 +1,3 @@
-export type RegisterDto = {
-  name: string;
-  email: string;
-  password: string;
-};
+import type { RegisterInput } from '../validations/authValidation.js';
+
+export type RegisterDto = RegisterInput;

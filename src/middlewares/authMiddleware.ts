@@ -2,29 +2,50 @@ import { NextFunction, Response } from "express";
 import jwt from "jsonwebtoken";
 import { env } from "../config/env.js";
 import { AuthenticatedRequest } from "../types/AuthenticatedRequest.js";
+import {
+    authorizationHeaderSchema,
+    tokenPayloadSchema
+} from "../validations/tokenValidation.js";
 
 export function authMiddleware(
     req: AuthenticatedRequest,
     res: Response,
     next: NextFunction
 ) {
-    const authHeader = req.headers.authorization;
+    const headerResult = authorizationHeaderSchema.safeParse(
+        req.headers.authorization
+    );
 
-    if (!authHeader) {
+    if (!headerResult.success) {
         return res.status(401).json({
-            message: "Token bulunamadı."
+            message: "Kimlik doğrulama bilgisi geçersiz.",
+            errors: headerResult.error.issues.map((issue) => ({
+                field: "authorization",
+                message: issue.message
+            }))
         });
     }
 
-    const token = authHeader.replace("Bearer ", "");
+    const token = headerResult.data.replace(/^Bearer\s+/, "");
 
     try {
-        const decoded = jwt.verify(token, env.jwtSecret) as {
-            id: number;
-            email: string;
-        };
+        const decoded = jwt.verify(token, env.jwtSecret);
+        const payloadResult = tokenPayloadSchema.safeParse(decoded);
 
-        req.user = decoded;
+        if (!payloadResult.success) {
+            return res.status(401).json({
+                message: "Token içeriği geçersiz.",
+                errors: payloadResult.error.issues.map((issue) => ({
+                    field: issue.path.join(".") || "token",
+                    message: issue.message
+                }))
+            });
+        }
+
+        req.user = {
+            id: payloadResult.data.id,
+            email: payloadResult.data.email
+        };
 
         return next();
     } catch {

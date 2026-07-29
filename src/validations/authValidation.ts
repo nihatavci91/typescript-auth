@@ -35,3 +35,6 @@ export const loginSchema = z
       .min(1, 'Şifre alanı zorunludur.'),
   })
   .strict();
+
+export type RegisterInput = z.infer<typeof registerSchema>;
+export type LoginInput = z.infer<typeof loginSchema>;

@@ -38,3 +38,5 @@ export const updateProfileSchema = z
   .refine((data) => Object.keys(data).length > 0, {
     message: 'Güncellenecek en az bir profil alanı gönderilmelidir.',
   });
+
+export type UpdateProfileInput = z.infer<typeof updateProfileSchema>;

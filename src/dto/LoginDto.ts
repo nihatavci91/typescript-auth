@@ -1,4 +1,3 @@
-export type LoginDto = {
-  email: string;
-  password: string;
-};
+import type { LoginInput } from '../validations/authValidation.js';
+
+export type LoginDto = LoginInput;
