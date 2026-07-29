@@ -1,0 +1,9 @@
+node_modules
+dist
+generated
+.git
+.idea
+.env
+.env.docker
+npm-debug.log*
+*.log
